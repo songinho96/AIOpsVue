@@ -41,6 +41,7 @@
 // import axios from 'axios';
 import { signUpUser } from '@/api/index';
 import { validateEmail } from '../utils/validation';
+import 'vuejs-noty/dist/vuejs-noty.css';
 export default {
   data() {
     return {
@@ -67,7 +68,10 @@ export default {
       const { data } = await signUpUser(userData);
       console.log(data);
       // this.logMessage = `${data.username}님이 가입되었습니다.`;
-      alert(`${data.username}님이 가입되었습니다.`);
+      this.$noty.success(`${data.username}님이 가입되었습니다.`, {
+        timeout: 2000,
+        layout: 'topRight',
+      });
       this.$router.push('login');
       this.initForm;
     },
