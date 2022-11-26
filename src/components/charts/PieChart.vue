@@ -76,10 +76,6 @@ export default {
                 '<tr><b>{point.hostname}</b></tr>' +
                 '<tr><td style="color:{point.color};padding:0">{point.name}: </td>' +
                 '<td style="padding:3px"><b>{point.y} {point.unit}</b></td></tr>',
-              style: {
-                color:
-                  (Chart.theme && Chart.theme.contrastTextColor) || 'black',
-              },
             },
             showInLegend: true,
           },

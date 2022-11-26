@@ -36,14 +36,16 @@
 </template>
 
 <script>
-import { loginUser } from '@/api/index';
 import { validateEmail } from '@/utils/validation';
+import 'vuejs-noty/dist/vuejs-noty.css';
+import { loginUser } from '@/api/index';
+import { saveAuthToCookie, saveUserToCookie } from '@/utils/cookies';
+
 export default {
   data() {
     return {
       email: '',
       password: '',
-      logMessage: '',
     };
   },
   // 자동 연산
@@ -54,21 +56,33 @@ export default {
   },
   methods: {
     async submitForm() {
-      const userData = {
-        email: this.email,
-        password: this.password,
-      };
-      const { data } = await loginUser(userData);
-      console.log(data);
-      if (data === 'pass') {
-        alert('안녕하세요');
+      try {
+        const userData = {
+          email: this.email,
+          password: this.password,
+        };
+
+        // await this.$store.dispatch('LOGIN', userData);
+        const { data } = await loginUser(userData);
+        console.log(data);
+
+        // store
+        this.$store.commit('setToken', data.token);
+        this.$store.commit('setUsername', data.username);
+        // cookie
+        saveAuthToCookie(data.token);
+        saveUserToCookie(data.username);
 
         this.$router.push('/main');
-      } else if (data === 'error') {
-        alert('아이디나 비밀번호가 틀렸습니다.');
+      } catch (error) {
+        this.$noty.error(`아이디나 비밀번호가 틀렸습니다. `, {
+          timeout: 2000,
+          layout: 'topRight',
+        });
+        console.log(error.response.data);
+      } finally {
+        this.initForm();
       }
-
-      this.initForm();
     },
     initForm() {
       this.email = '';

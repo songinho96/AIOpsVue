@@ -13,8 +13,8 @@
       <tr v-for="p in paginatedData" :key="p.id">
         <td class="hostname">{{ p.hostname }}</td>
         <td class="datetime">{{ p.datetime.slice(0, -5) }}</td>
-        <td class="resource_type">{{ p.resource_type }}</td>
-        <td class="metric_type">{{ p.metric_type }}</td>
+        <td class="resource_type">{{ p.resourceType }}</td>
+        <td class="metric_type">{{ p.metricType }}</td>
         <td class="value">{{ p.value.toFixed(4) }}</td>
         <td v-if="p.unit === ''" class="unit">-</td>
 

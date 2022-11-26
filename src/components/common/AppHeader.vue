@@ -15,20 +15,41 @@
   >
     <div v-if="$route.path === '/main'">DashBoard</div>
     <div v-if="$route.path === '/table'">Metric</div>
-    <div
-      v-if="$route.path === '/main' || $route.path === '/table'"
-      @click="clickLogout"
-      class="Header_logout"
-    >
-      로그아웃
-    </div>
+    <template v-if="isUserLogin">
+      <div
+        v-if="$route.path === '/main' || $route.path === '/table'"
+        class="Header_logout"
+      >
+        <div>{{ $store.state.username }}님 안녕하세요</div>
+        <a class="Header_logout" href="javascript:;" @click="logoutUser"
+          >로그아웃</a
+        >
+      </div>
+    </template>
+    <template v-else>
+      <div>
+        <router-link to="/login" class="Header_logout">로그인</router-link>
+        <router-link to="/signUp" class="Header_logout">회원가입</router-link>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
+import { deleteCookie } from '@/utils/cookies';
 export default {
+  computed: {
+    isUserLogin() {
+      return this.$store.getters.isLogin;
+    },
+  },
   methods: {
-    clickLogout() {
+    logoutUser() {
+      this.$store.commit('clearUsername');
+      this.$store.commit('clearToken');
+      deleteCookie('til_auth');
+      deleteCookie('til_user');
+      deleteCookie('token');
       this.$router.push('/login');
     },
   },
@@ -54,5 +75,6 @@ export default {
   cursor: pointer;
   color: blueviolet;
   font-weight: 700;
+  text-decoration: none;
 }
 </style>

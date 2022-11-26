@@ -4,6 +4,7 @@ import router from '@/routes/index';
 import axios from 'axios';
 import store from '@/store/index';
 import HighchartsVue from 'highcharts-vue';
+import VueNoty from 'vuejs-noty';
 
 // axios 추가
 Vue.use(axios);
@@ -12,6 +13,8 @@ Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 
 Vue.use(HighchartsVue);
+Vue.use(VueNoty);
+
 // Vue.prototype.$HighchartsVue = HighchartsVue;
 // Vue.config.productionTip = false;
 

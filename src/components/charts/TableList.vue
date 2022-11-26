@@ -9,16 +9,16 @@
         <div class="table">
           <div class="hostname">hostname</div>
           <div class="datetime">datetime</div>
-          <div class="resource_type">resource_type</div>
-          <div class="metric_type">metric_type</div>
+          <div class="resource_type">resourceType</div>
+          <div class="metric_type">metricType</div>
           <div class="value">value</div>
           <div class="unit">unit</div>
         </div>
         <div v-for="p in sortChartDatas.slice(0, 5)" :key="p.id" class="table">
           <div class="hostname">{{ p.hostname }}</div>
           <div class="datetime">{{ p.datetime.slice(0, -5) }}</div>
-          <div class="resource_type">{{ p.resource_type }}</div>
-          <div class="metric_type">{{ p.metric_type }}</div>
+          <div class="resource_type">{{ p.resourceType }}</div>
+          <div class="metric_type">{{ p.metricType }}</div>
           <div class="value">{{ p.value }}</div>
           <div class="unit">{{ p.unit }}</div>
         </div>

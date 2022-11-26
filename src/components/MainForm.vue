@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- <div class="DashBoard_Header">DashBoard</div> -->
-
     <div class="mainPage-layout">
-      <div class="chart-layout">
+      <LoadingSpinner v-if="isLoading"></LoadingSpinner>
+      <div v-else class="chart-layout">
         <BarChart
           :PieMemoryArray="PieMemoryArray"
           :PieDiskArray="PieDiskArray"
@@ -38,14 +37,15 @@
 import BarChart from '@/components/charts/BarChart.vue';
 import PieChart from '@/components/charts/PieChart.vue';
 import TableList from '@/components/charts/TableList.vue';
-
-import { fetchChart } from '@/api/index';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import { fetchChart, fetchResourceType } from '@/api/index';
 
 export default {
   components: {
     PieChart,
     BarChart,
     TableList,
+    LoadingSpinner,
   },
   data() {
     return {
@@ -69,14 +69,24 @@ export default {
       iowaitPct: [],
       niceTicks: [],
       stealTicks: [],
+      // isLoading
+      isLoading: false,
+      resourceType: 'cpu',
     };
   },
   methods: {
+    async fetchType() {
+      const type = this.resourceType;
+      const { data } = await fetchResourceType(type);
+      console.log(data);
+    },
     async fetchData() {
+      this.isLoading = true;
       const { data } = await fetchChart();
+      this.isLoading = false;
       this.chartDatas = data;
 
-      // metric_type 별
+      // metricType 별
       // disk
       // const iostatAwait = [];
       // const iostatWriteAwait = []
@@ -90,13 +100,13 @@ export default {
 
       // forEach 사용하여 배열 값 분배
       this.chartDatas.forEach(m => {
-        if (m.metric_type === 'iostat.await') {
+        if (m.metricType === 'iostat.await') {
           this.iostatAwait.push(m);
-        } else if (m.metric_type === 'iostat.write.await') {
+        } else if (m.metricType === 'iostat.write.await') {
           this.iostatWriteAwait.push(m);
-        } else if (m.metric_type === 'iostat.read.per_sec') {
+        } else if (m.metricType === 'iostat.read.per_sec') {
           this.iostatReadPerSec.push(m);
-        } else if (m.metric_type === 'iostat.read.await') {
+        } else if (m.metricType === 'iostat.read.await') {
           this.iostatReadAwait.push(m);
         } else return;
       });
@@ -112,7 +122,7 @@ export default {
       }
 
       diskValue.push({
-        metric_type: this.iostatAwait[0].metric_type,
+        metricType: this.iostatAwait[0].metricType,
         value: (iostatAwaitValue / this.iostatAwait.length).toFixed(3),
       });
 
@@ -124,7 +134,7 @@ export default {
       }
 
       diskValue.push({
-        metric_type: this.iostatWriteAwait[0].metric_type,
+        metricType: this.iostatWriteAwait[0].metricType,
         value: (iostatWriteAwaitValue / this.iostatWriteAwait.length).toFixed(
           2,
         ),
@@ -138,7 +148,7 @@ export default {
       }
 
       diskValue.push({
-        metric_type: this.iostatReadPerSec[0].metric_type,
+        metricType: this.iostatReadPerSec[0].metricType,
         value: (
           iostatReadPerSecValue /
           this.iostatReadPerSec.length /
@@ -154,14 +164,14 @@ export default {
       }
 
       diskValue.push({
-        metric_type: this.iostatReadAwait[0].metric_type,
+        metricType: this.iostatReadAwait[0].metricType,
         value: (iostatReadAwaitValue / this.iostatReadAwait.length).toFixed(2),
       });
       console.log(diskValue);
 
       // 최종 DISK
       diskValue.forEach(m => {
-        this.PieDiskArray.push([m.metric_type, Number(m.value)]);
+        this.PieDiskArray.push([m.metricType, Number(m.value)]);
       });
 
       //
@@ -182,13 +192,13 @@ export default {
       const memoryValue = [];
       // forEach 사용하여 배열 값 분배
       this.chartDatas.forEach(m => {
-        if (m.metric_type === 'actual.used') {
+        if (m.metricType === 'actual.used') {
           this.actualUsed.push(m);
-        } else if (m.metric_type === 'hugepages.default_size') {
+        } else if (m.metricType === 'hugepages.default_size') {
           this.hugepagesDefaultSize.push(m);
-        } else if (m.metric_type === 'actual.used.pct') {
+        } else if (m.metricType === 'actual.used.pct') {
           this.actualUsedPct.push(m);
-        } else if (m.metric_type === 'actual.free') {
+        } else if (m.metricType === 'actual.free') {
           this.actualFree.push(m);
         } else return;
       });
@@ -204,7 +214,7 @@ export default {
       // console.log(actualUsedValue);
 
       memoryValue.push({
-        metric_type: this.actualUsed[0].metric_type,
+        metricType: this.actualUsed[0].metricType,
         value: (actualUsedValue / this.actualUsed.length / 1000).toFixed(2),
       });
 
@@ -216,7 +226,7 @@ export default {
       }
 
       memoryValue.push({
-        metric_type: this.hugepagesDefaultSize[0].metric_type,
+        metricType: this.hugepagesDefaultSize[0].metricType,
         value: (
           hugepagesDefaultSizeValue / this.hugepagesDefaultSize.length
         ).toFixed(2),
@@ -229,7 +239,7 @@ export default {
       }
 
       memoryValue.push({
-        metric_type: this.actualUsedPct[0].metric_type,
+        metricType: this.actualUsedPct[0].metricType,
         value: (actualUsedPctValue / this.actualUsedPct.length).toFixed(2),
       });
 
@@ -240,14 +250,14 @@ export default {
       }
 
       memoryValue.push({
-        metric_type: this.actualFree[0].metric_type,
+        metricType: this.actualFree[0].metricType,
         value: (actualFreeValue / this.actualFree.length / 1000).toFixed(2),
       });
       console.log('메모리: ' + memoryValue);
 
       // 최종 DISK
       memoryValue.forEach(m => {
-        this.PieMemoryArray.push([m.metric_type, Number(m.value)]);
+        this.PieMemoryArray.push([m.metricType, Number(m.value)]);
       });
 
       //
@@ -270,13 +280,13 @@ export default {
       const cpuValue = [];
       // forEach 사용하여 배열 값 분배
       this.chartDatas.forEach(m => {
-        if (m.metric_type === 'system.pct') {
+        if (m.metricType === 'system.pct') {
           this.systemPct.push(m);
-        } else if (m.metric_type === 'iowait.pct') {
+        } else if (m.metricType === 'iowait.pct') {
           this.iowaitPct.push(m);
-        } else if (m.metric_type === 'nice.ticks') {
+        } else if (m.metricType === 'nice.ticks') {
           this.niceTicks.push(m);
-        } else if (m.metric_type === 'steal.ticks') {
+        } else if (m.metricType === 'steal.ticks') {
           this.stealTicks.push(m);
         } else return;
       });
@@ -289,7 +299,7 @@ export default {
       }
 
       cpuValue.push({
-        metric_type: this.systemPct[0].metric_type,
+        metricType: this.systemPct[0].metricType,
         value: (systemPctValue / this.systemPct.length).toFixed(2),
       });
 
@@ -300,7 +310,7 @@ export default {
       }
 
       cpuValue.push({
-        metric_type: this.iowaitPct[0].metric_type,
+        metricType: this.iowaitPct[0].metricType,
         value: (iowaitPctValue / this.iowaitPct.length).toFixed(2),
       });
 
@@ -311,7 +321,7 @@ export default {
       }
 
       cpuValue.push({
-        metric_type: this.niceTicks[0].metric_type,
+        metricType: this.niceTicks[0].metricType,
         value: (niceTicksValue / this.niceTicks.length).toFixed(2),
       });
 
@@ -322,14 +332,14 @@ export default {
       }
 
       cpuValue.push({
-        metric_type: this.stealTicks[0].metric_type,
+        metricType: this.stealTicks[0].metricType,
         value: (stealTicksValue / this.stealTicks.length).toFixed(2),
       });
-      console.log('cpuValue: ' + cpuValue);
+      console.log(cpuValue);
 
       // 최종 DISK
       cpuValue.forEach(m => {
-        this.PieCpuArray.push([m.metric_type, Number(m.value)]);
+        this.PieCpuArray.push([m.metricType, Number(m.value)]);
       });
 
       // console.log(this.PieDiskArray);
@@ -337,22 +347,14 @@ export default {
     },
   },
   created() {
+    this.fetchType();
+
     this.fetchData();
   },
 };
 </script>
 
 <style>
-.DashBoard_Header {
-  height: 100px;
-  background-color: aquamarine;
-  display: flex;
-  font-size: 2rem;
-  font-weight: 700;
-  align-items: center;
-  padding-left: 50px;
-}
-
 .mainPage-layout {
   width: 100%;
   display: flex;

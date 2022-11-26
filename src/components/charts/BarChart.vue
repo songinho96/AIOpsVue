@@ -124,7 +124,7 @@ export default {
       //       type: 'column',
       //       name: this.PieDiskArray.map(m => m[0]),
       //       data: this.PieDiskArray,
-      //       // name: diskValue.map(m => m.metric_type),
+      //       // name: diskValue.map(m => m.metricType),
       //       // data: diskValue.map(m => Number(m.value)),
       //     },
       //   ],
@@ -155,7 +155,25 @@ export default {
             enableMouseTracking: false,
           },
         },
-        series: [],
+        series: [
+          {
+            name: this.iostatAwait[0].metricType,
+            data: this.iostatAwait.map(m => m.value),
+            // data: this.b,
+          },
+          {
+            name: this.iostatWriteAwait[0].metricType,
+            data: this.iostatWriteAwait.map(m => m.value),
+          },
+          {
+            name: this.iostatReadPerSec[0].metricType,
+            data: this.iostatReadPerSec.map(m => m.value / 1000),
+          },
+          {
+            name: this.iostatReadAwait[0].metricType,
+            data: this.iostatReadAwait.map(m => m.value),
+          },
+        ],
       },
     };
   },
@@ -194,20 +212,20 @@ export default {
         },
         series: [
           {
-            name: this.iostatAwait[0].metric_type,
+            name: this.iostatAwait[0].metricType,
             data: this.iostatAwait.map(m => m.value),
             // data: this.b,
           },
           {
-            name: this.iostatWriteAwait[0].metric_type,
+            name: this.iostatWriteAwait[0].metricType,
             data: this.iostatWriteAwait.map(m => m.value),
           },
           {
-            name: this.iostatReadPerSec[0].metric_type,
+            name: this.iostatReadPerSec[0].metricType,
             data: this.iostatReadPerSec.map(m => m.value / 1000),
           },
           {
-            name: this.iostatReadAwait[0].metric_type,
+            name: this.iostatReadAwait[0].metricType,
             data: this.iostatReadAwait.map(m => m.value),
           },
         ],
@@ -271,20 +289,20 @@ export default {
         },
         series: [
           {
-            name: this.actualUsed[0].metric_type,
+            name: this.actualUsed[0].metricType,
             data: this.actualUsed.map(m => m.value / 1000),
             // data: this.b,
           },
           {
-            name: this.hugepagesDefaultSize[0].metric_type,
+            name: this.hugepagesDefaultSize[0].metricType,
             data: this.hugepagesDefaultSize.map(m => m.value),
           },
           {
-            name: this.actualUsedPct[0].metric_type,
+            name: this.actualUsedPct[0].metricType,
             data: this.actualUsedPct.map(m => m.value),
           },
           {
-            name: this.actualFree[0].metric_type,
+            name: this.actualFree[0].metricType,
             data: this.actualFree.map(m => m.value / 1000),
           },
         ],
@@ -349,20 +367,20 @@ export default {
         },
         series: [
           {
-            name: this.systemPct[0].metric_type,
+            name: this.systemPct[0].metricType,
             data: this.systemPct.map(m => m.value),
             // data: this.b,
           },
           {
-            name: this.iowaitPct[0].metric_type,
+            name: this.iowaitPct[0].metricType,
             data: this.iowaitPct.map(m => m.value),
           },
           {
-            name: this.niceTicks[0].metric_type,
+            name: this.niceTicks[0].metricType,
             data: this.niceTicks.map(m => m.value),
           },
           {
-            name: this.stealTicks[0].metric_type,
+            name: this.stealTicks[0].metricType,
             data: this.stealTicks.map(m => m.value),
           },
         ],
@@ -381,11 +399,11 @@ export default {
       };
     },
   },
-  created() {
-    setTimeout(() => {
-      this.clickDisk();
-    }, 300);
-  },
+  // created() {
+  //   setTimeout(() => {
+  //     this.clickDisk();
+  //   }, 300);
+  // },
 };
 </script>
 
