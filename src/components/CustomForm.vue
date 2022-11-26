@@ -48,31 +48,23 @@
           <div class="BasicWrap">
             <component
               :key="componentKey"
-              :style="customStyle"
               :is="item.c"
-              class="BarSize"
               v-if="item.isBar"
             ></component>
           </div>
           <component
             :key="componentKey"
-            :style="customStyle"
             :is="item.c"
-            class="BubbleSize"
             v-if="item.isBubble"
           ></component>
           <component
             :key="componentKey"
-            :style="customStyle"
             :is="item.c"
-            class="LineSize"
             v-if="item.isLine"
           ></component>
           <component
             :key="componentKey"
-            :style="customStyle"
             :is="item.c"
-            class="PieSize"
             v-if="item.isPie"
           ></component>
 
@@ -127,19 +119,10 @@ export default {
       resizable: true,
       colNum: 12,
       index: 0,
-      newW: 468,
-      newH: 310,
       addChart: 'Bar',
     };
   },
-  computed: {
-    customStyle() {
-      return {
-        '--BarW': this.newW + 'px',
-        '--BarH': this.newH + 'px',
-      };
-    },
-  },
+
   mounted() {
     // this.$gridlayout.load();
     this.index = this.layout.length;
@@ -224,19 +207,7 @@ export default {
       this.layout.splice(index, 1);
     },
 
-    resizedEvent: function (i, newX, newY, newHPx, newWPx) {
-      'RESIZED i=' +
-        i +
-        ', X=' +
-        newX +
-        ', Y=' +
-        newY +
-        ', H(px)=' +
-        newHPx +
-        ', W(px)=' +
-        newWPx;
-      this.newW = newWPx;
-      this.newH = newHPx;
+    resizedEvent: function () {
       this.componentKey += 1;
     },
   },

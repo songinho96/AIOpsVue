@@ -64,7 +64,6 @@ export default {
 
         // await this.$store.dispatch('LOGIN', userData);
         const { data } = await loginUser(userData);
-        console.log(data);
 
         // store
         this.$store.commit('setToken', data.token);
@@ -79,7 +78,6 @@ export default {
           timeout: 2000,
           layout: 'topRight',
         });
-        console.log(error.response.data);
       } finally {
         this.initForm();
       }
