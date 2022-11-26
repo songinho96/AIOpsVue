@@ -77,8 +77,7 @@ export default {
   methods: {
     async fetchType() {
       const type = this.resourceType;
-      const { data } = await fetchResourceType(type);
-      console.log(data);
+      await fetchResourceType(type);
     },
     async fetchData() {
       this.isLoading = true;
@@ -112,7 +111,6 @@ export default {
       });
 
       // BarChart disk 배열
-      // console.log(iostatAwait);
 
       // 파이차트 disk 배열
       // iostat.await
@@ -167,7 +165,6 @@ export default {
         metricType: this.iostatReadAwait[0].metricType,
         value: (iostatReadAwaitValue / this.iostatReadAwait.length).toFixed(2),
       });
-      console.log(diskValue);
 
       // 최종 DISK
       diskValue.forEach(m => {
@@ -203,15 +200,12 @@ export default {
         } else return;
       });
 
-      // console.log('mem: ' + actualUsed.length);
-
       // 파이차트 Memory 배열
       // actual.used
       let actualUsedValue = 0;
       for (let i = 0; i < this.actualUsed.length; i++) {
         actualUsedValue = actualUsedValue + this.actualUsed[i].value;
       }
-      // console.log(actualUsedValue);
 
       memoryValue.push({
         metricType: this.actualUsed[0].metricType,
@@ -253,7 +247,6 @@ export default {
         metricType: this.actualFree[0].metricType,
         value: (actualFreeValue / this.actualFree.length / 1000).toFixed(2),
       });
-      console.log('메모리: ' + memoryValue);
 
       // 최종 DISK
       memoryValue.forEach(m => {
@@ -335,14 +328,12 @@ export default {
         metricType: this.stealTicks[0].metricType,
         value: (stealTicksValue / this.stealTicks.length).toFixed(2),
       });
-      console.log(cpuValue);
 
       // 최종 DISK
       cpuValue.forEach(m => {
         this.PieCpuArray.push([m.metricType, Number(m.value)]);
       });
 
-      // console.log(this.PieDiskArray);
       // this.$store.commit('setPieDisk', this.PieDiskArray);
     },
   },

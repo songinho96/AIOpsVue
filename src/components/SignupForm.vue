@@ -59,21 +59,28 @@ export default {
   },
   methods: {
     async submitForm() {
-      const userData = {
-        email: this.email,
-        password: this.password,
-        username: this.username,
-      };
+      try {
+        const userData = {
+          email: this.email,
+          password: this.password,
+          username: this.username,
+        };
 
-      const { data } = await signUpUser(userData);
-      console.log(data);
-      // this.logMessage = `${data.username}님이 가입되었습니다.`;
-      this.$noty.success(`${data.username}님이 가입되었습니다.`, {
-        timeout: 2000,
-        layout: 'topRight',
-      });
-      this.$router.push('login');
-      this.initForm;
+        const { data } = await signUpUser(userData);
+
+        // this.logMessage = `${data.username}님이 가입되었습니다.`;
+        this.$noty.success(`${data.username}님이 가입되었습니다.`, {
+          timeout: 2000,
+          layout: 'topRight',
+        });
+        this.$router.push('login');
+        this.initForm;
+      } catch (error) {
+        this.$noty.error(`이미 생성된 이메일 입니다.`, {
+          timeout: 2000,
+          layout: 'topRight',
+        });
+      }
     },
     // input 비우기
     initForm() {

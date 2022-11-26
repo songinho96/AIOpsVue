@@ -167,7 +167,6 @@ export default {
     Bubble() {
       //   this.isBubble = true;
       this.addChart = 'Bubble';
-      console.log(this.addChart);
       this.layout.push({
         x: (this.layout.length * 4) % (this.colNum || 12),
         y: this.layout.length + (this.colNum || 12), // puts it at the bottom
@@ -226,8 +225,7 @@ export default {
     },
 
     resizedEvent: function (i, newX, newY, newHPx, newWPx) {
-      const msg =
-        'RESIZED i=' +
+      'RESIZED i=' +
         i +
         ', X=' +
         newX +
@@ -239,7 +237,6 @@ export default {
         newWPx;
       this.newW = newWPx;
       this.newH = newHPx;
-      console.log(msg);
       this.componentKey += 1;
     },
   },

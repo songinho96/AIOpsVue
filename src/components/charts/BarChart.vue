@@ -179,11 +179,10 @@ export default {
   },
   methods: {
     clickDisk() {
-      console.log(this.iostatAwait.map(m => m.value));
       this.isActiveDisk = true;
       this.isActiveMemory = false;
       this.isActiveCpu = false;
-      console.log(this.PieDiskArray);
+
       this.chartType = 'disk';
       this.chartOptions = {
         chart: {
@@ -325,7 +324,7 @@ export default {
       this.isActiveMemory = false;
       this.isActiveCpu = true;
       this.chartType = 'cpu';
-      console.log(this.iostatAwait);
+
       // this.chartOptions = {
       //   xAxis: {
       //     categories: this.PieCpuArray.map(m => m[0]),

@@ -22,7 +22,6 @@ export default {
     async fetchData() {
       const { data } = await fetchChart();
       this.chartDatas = data;
-      //   console.log(this.chartDatas);
     },
   },
   created() {
